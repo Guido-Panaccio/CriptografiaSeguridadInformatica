@@ -13,7 +13,7 @@ npm install pg
 3.Prisma (ORM)
 npm i prisma -D
 4. Migracion prisma (Para que les cree las tablas y sus campos automatico en la base de datos)
-En el archivo .env tienen la cadena de conexión a la base de datos con postgressql (en usuario ponen su usuario de postgress y contraseña la contrasela, el resto se mantiene igual)
+En el archivo .env tienen la cadena de conexión a la base de datos con postgressql (en usuario ponen su usuario de postgress y contraseña la contraseña, el resto se mantiene igual)
 ```
 DATABASE_URL="postgresql://usuario:contraseña@localhost:5432/hospitales"
 ```
