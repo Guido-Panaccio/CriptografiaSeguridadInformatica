@@ -1,0 +1,280 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		--background: 0 0% 100%;
+		--foreground: 222.2 84% 4.9%;
+
+		--card: 0 0% 100%;
+		--card-foreground: 222.2 84% 4.9%;
+
+		--popover: 0 0% 100%;
+		--popover-foreground: 222.2 84% 4.9%;
+
+		--primary: 222.2 47.4% 11.2%;
+		--primary-foreground: 210 40% 98%;
+
+		--secondary: 210 40% 96.1%;
+		--secondary-foreground: 222.2 47.4% 11.2%;
+
+		--muted: 210 40% 96.1%;
+		--muted-foreground: 215.4 16.3% 46.9%;
+
+		--accent: 210 40% 96.1%;
+		--accent-foreground: 222.2 47.4% 11.2%;
+
+		--destructive: 0 84.2% 60.2%;
+		--destructive-foreground: 210 40% 98%;
+
+		--border: 214.3 31.8% 91.4%;
+		--input: 214.3 31.8% 91.4%;
+		--ring: 222.2 84% 4.9%;
+
+		--radius: 0.5rem;
+	}
+
+	.dark {
+		--background: 222.2 84% 4.9%;
+		--foreground: 210 40% 98%;
+
+		--card: 222.2 84% 4.9%;
+		--card-foreground: 210 40% 98%;
+
+		--popover: 222.2 84% 4.9%;
+		--popover-foreground: 210 40% 98%;
+
+		--primary: 210 40% 98%;
+		--primary-foreground: 222.2 47.4% 11.2%;
+
+		--secondary: 217.2 32.6% 17.5%;
+		--secondary-foreground: 210 40% 98%;
+
+		--muted: 217.2 32.6% 17.5%;
+		--muted-foreground: 215 20.2% 65.1%;
+
+		--accent: 217.2 32.6% 17.5%;
+		--accent-foreground: 210 40% 98%;
+
+		--destructive: 0 62.8% 30.6%;
+		--destructive-foreground: 210 40% 98%;
+
+		--border: 217.2 32.6% 17.5%;
+		--input: 217.2 32.6% 17.5%;
+		--ring: 212.7 26.8% 83.9%;
+	}
+}
+
+@layer base {
+	* {
+		@apply border-border;
+	}
+	body {
+		@apply bg-background text-foreground;
+	}
+}
+
+.error-message {
+	background-color: #ffcccc;
+	color: #ff0000;
+	padding: 10px;
+	border: 1px solid #ff0000;
+	border-radius: 5px;
+	margin-top: 10px;
+}
+
+/* Estilos básicos para un modal */
+.modal {
+	display: none; /* Por defecto, el modal está oculto */
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: white;
+	padding: 20px;
+	border-radius: 5px;
+	box-shadow: 0 0 100px rgba(0, 0, 0, 0.2);
+	z-index: 9999;
+}
+
+/* Aplicando la clase modal-open para mostrar el modal */
+.modal-open {
+	display: block; /* Mostrar el modal cuando tiene la clase modal-open */
+}
+
+.modal-box {
+	position: relative;
+	background-color: #fff;
+	border-radius: 8px;
+	padding: 20px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	max-width: 100%; /* Ancho máximo del modal */
+	margin: 0 auto; /* Centrar horizontalmente */
+}
+
+/* Estilos para el botón dentro del modal */
+.btn-circle {
+	/* Estilos generales para hacer un botón circular */
+	width: 15px; /* Ancho fijo del botón */
+	height: 15px; /* Altura fija del botón */
+	border-radius: 50%; /* Para hacer el botón circular */
+	padding: 0; /* Elimina cualquier relleno interno */
+	background-color: red; /* Color de fondo del botón, puedes cambiarlo */
+	color: #fff; /* Color del texto dentro del botón */
+	border: none; /* Quita el borde del botón */
+	cursor: pointer; /* Muestra el cursor como indicador de interactividad */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+/* Ajustes específicos para un botón pequeño */
+.btn-sm {
+	/* Estilos para un botón pequeño */
+	font-size: 10px; /* Tamaño de la fuente */
+	/* Otros ajustes de tamaño si es necesario */
+}
+
+/* Estilos específicos para posicionar el botón en la esquina superior derecha */
+.absolute {
+	/* Estilos para posicionar de manera absoluta */
+	position: absolute;
+	/* Ajustes de posición */
+	top: 10px;
+	right: 10px;
+	/* Otros estilos opcionales */
+}
+
+/* Estilos de ejemplo */
+.overflow-x-auto {
+	overflow-x: auto;
+}
+
+/* Estilos para que las celdas ocupen el ancho máximo posible */
+.w-max-content {
+	width: max-content;
+	white-space: nowrap;
+}
+
+.px-4 {
+	padding-left: 1rem; /* Puedes ajustar el valor según el margen deseado */
+	padding-right: 1rem; /* Puedes ajustar el valor según el margen deseado */
+}
+
+.F {
+	text-align: center;
+}
+
+.text-left {
+	text-align: left;
+}
+
+.tooltip-container {
+	position: relative;
+	display: inline-block;
+}
+
+.tooltip-label {
+	cursor: help;
+}
+
+.tooltip-label:hover::before {
+	content: attr(data-tooltip);
+	position: absolute;
+	background: rgba(0, 0, 0, 0.8);
+	color: #fff;
+	padding: 5px 10px;
+	border-radius: 4px;
+	bottom: calc(100% + 5px);
+	left: 50%;
+	transform: translateX(-50%);
+	white-space: nowrap;
+	z-index: 999;
+	font-size: 11px;
+}
+
+.center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.margenExamen {
+	position: absolute;
+	top: 4rem; /* Esto establece la posición 1rem desde el borde superior del contenedor padre */
+}
+
+.cursiva {
+	font-style: italic;
+}
+
+.gris {
+	color: #888; /* Cambia el color a uno grisáceo según tu preferencia */
+}
+
+.custom-file-input {
+	color: transparent;
+	background-color: transparent;
+	border: none;
+	outline: none;
+	font-size: 0.85em;
+	cursor: pointer;
+}
+
+.loading-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	gap: 20px;
+}
+.loading-text {
+	color: white; /* Change this to your preferred color */
+	font-size: 1.5em; /* Change this to your preferred font size */
+	font-weight: bold; /* Makes the text bold */
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Adds a shadow to the text */
+}
+
+@keyframes fadein {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.loading-text span {
+	animation: loading 1s infinite;
+}
+
+.loading-text span:nth-child(2) {
+	animation-delay: 0.2s;
+}
+
+.loading-text span:nth-child(3) {
+	animation-delay: 0.4s;
+}
+
+@keyframes loading {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.sizeEstudioTipo {
+	font-size: 21px;
+}
+
+.sizeSubTitleEstudiosRealizados {
+	font-size: 18px;
+}
+
+.marginTopSinDatos {
+	margin-top: 10px;
+}

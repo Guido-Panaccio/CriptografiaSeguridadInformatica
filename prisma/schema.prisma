@@ -1,0 +1,114 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Post {
+  id        Int     @id @default(autoincrement())
+  title     String
+  content   String?
+  published Boolean @default(false)
+}
+
+model Usuarios {
+  idUsuario     Int        @id @default(autoincrement())
+  apellido      String     @db.VarChar(50)
+  nombre        String     @db.VarChar(50)
+  tipoDocumento String     @db.VarChar(3)
+  documento     Int
+  direccion     String?    @db.VarChar(100)
+  telefono      String?    @db.VarChar(50)
+  username      String?    @db.VarChar(255)
+  contrasena    String?    @db.VarChar(255)
+  Examenes      Examenes[]
+  Turnos  Turnos[]
+}
+
+model Pacientes {
+  idPaciente    Int            @id @default(autoincrement())
+  apellido      String         @db.VarChar(50)
+  nombre        String         @db.VarChar(50)
+  tipoDocumento String         @db.VarChar(3)
+  documento     Int
+  direccion     String?        @db.VarChar(100)
+  telefono      String?        @db.VarChar(50)
+  ocupacion     String?        @db.VarChar(50)
+  idPrepaga     String?        @db.VarChar(5)
+  tipoPrepaga   TiposPrepagas? @relation(fields: [idPrepaga], references: [idPrepaga], onDelete: SetNull, onUpdate: SetNull)
+  Examenes      Examenes[]
+  Turnos  Turnos[]
+}
+
+model Examenes {
+  idExamen         Int           @id @default(autoincrement())
+  idPaciente       Int
+  paciente         Pacientes     @relation(fields: [idPaciente], references: [idPaciente], onDelete: Cascade, onUpdate: Cascade)
+  idUsuario        Int
+  usuario          Usuarios      @relation(fields: [idUsuario], references: [idUsuario], onDelete: Cascade, onUpdate: Cascade)
+  tipoExamen       String        @db.VarChar(5)
+  tipoExamenObject TiposExamenes @relation(fields: [tipoExamen], references: [tipoExamen])
+  observaciones    String?       @db.VarChar(200)
+  fechaRealizacion DateTime
+  estudio          Estudios[]
+}
+
+model TiposPrepagas {
+  idPrepaga   String      @id @db.VarChar(5)
+  descripcion String      @db.VarChar(50)
+  pacientes   Pacientes[]
+}
+
+model TiposExamenes {
+  tipoExamen  String     @id @db.VarChar(5)
+  descripcion String     @db.VarChar(50)
+  examenes    Examenes[]
+}
+
+model Estudios {
+  idEstudio        Int      @id @default(autoincrement())
+  tipoEstudio      String   @db.VarChar(50)
+  resultado        String?  @db.VarChar(200)
+  Examenes         Examenes @relation(fields: [examenesIdExamen], references: [idExamen], onDelete: Cascade, onUpdate: Cascade)
+  examenesIdExamen Int
+  estudioPath      String?   @db.VarChar(200)
+  fechaRealizacion DateTime
+}
+
+model TiposSalas {
+  idSala      Int        @id @default(autoincrement())
+  descripcion String     @db.VarChar(50)
+  Turnos Turnos[]
+}
+
+model Medicos {
+  idMedico   Int            @id @default(autoincrement())
+  apellido      String         @db.VarChar(50)
+  nombre        String         @db.VarChar(50)
+  tipoDocumento String         @db.VarChar(3)
+  documento     Int
+  direccion     String?        @db.VarChar(100)
+  telefono      String?        @db.VarChar(50)
+  username      String?    @db.VarChar(255)
+  contrasena    String?    @db.VarChar(255)
+  Turnos  Turnos[]
+}
+
+model Turnos {
+  idTurno Int  @id @default(autoincrement())
+  idPaciente Int
+  paciente         Pacientes     @relation(fields: [idPaciente], references: [idPaciente], onDelete: Cascade, onUpdate: Cascade) 
+  idMedico Int
+  medico        Medicos     @relation(fields: [idMedico], references: [idMedico], onDelete: Cascade, onUpdate: Cascade)
+  idSala Int
+  sala TiposSalas @relation(fields: [idSala], references: [idSala], onDelete: Cascade, onUpdate: Cascade) 
+  fechaTurno DateTime
+  idUsuario Int
+  usuario Usuarios  @relation(fields: [idUsuario], references: [idUsuario], onDelete: Cascade, onUpdate: Cascade)
+}
