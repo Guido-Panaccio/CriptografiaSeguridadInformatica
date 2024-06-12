@@ -55,6 +55,58 @@ export const GET = async (req: NextRequest) => {
             error: 'Error al procesar la solicitud',
         });
     }
+}
 
+export const POST = async (req: NextRequest) => {
+    const requestData = await req.json();
 
+    const usuario = requestData.credenciales.usuario;
+    const contraseña = requestData.credenciales.contraseña;
+
+    const secret = process.env.JWT_SECRET || ""
+    const token = sign(
+        {
+           usuario,
+        },
+        secret,
+        {
+            expiresIn: MAX_AGE,
+        }
+    )
+    const serialized = serialize("OutSiteJWT", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        path: "/",
+        sameSite: "lax",
+        maxAge: MAX_AGE,
+    })
+
+    try{
+        const user = await prisma.usuarios.findFirst({
+            where: {
+                username: usuario,
+                contrasena: contraseña,
+            },
+        });
+
+        if (user) {
+            // El usuario existe en la base de datos
+            const response = NextResponse.json({
+                mensaje: 'Usuario autenticado correctamente',
+                usuario: usuario,
+            })
+            response.headers.set("Set-Cookie", serialized)
+            return response
+        } else {
+            // El usuario no existe en la base de datos
+            return NextResponse.json({
+                mensaje: 'Credenciales incorrectas',
+            });
+        }
+        
+    }catch(error){
+        return NextResponse.json({
+            error: 'Error al procesar la solicitud',
+        });
+    }
 }
