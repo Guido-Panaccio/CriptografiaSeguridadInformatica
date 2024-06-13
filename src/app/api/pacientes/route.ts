@@ -44,6 +44,11 @@ export const GET = async (req: NextRequest) => {
                     tipoPrepaga:true,
                 },
             })
+            // Reduce the nombre and apellido fields to the 10 first characters for every paciente and add ... at the end
+            pacientes.forEach((paciente) => {
+                paciente.nombre = "(encrypted) " + paciente.nombre.substring(0, 10) + '...'
+                paciente.apellido = "(encrypted) " + paciente.apellido.substring(0, 10) + '...'
+            })
             return NextResponse.json({
                 pacientes
             })
@@ -58,6 +63,9 @@ export const GET = async (req: NextRequest) => {
 export const POST = async (req: NextRequest) => {
     const requestData = await req.json();
     const paciente = requestData.paciente;
+
+    console.log('Paciente a insertar');
+    console.log(paciente);
 
     try {
         const insertPaciente = await prisma.pacientes.create({
@@ -78,6 +86,7 @@ export const POST = async (req: NextRequest) => {
             pacienteInsertado: insertPaciente,
         });
     } catch (error) {
+        console.log(error);
         return NextResponse.json({
             error: 'Error al procesar la solicitud',
         });

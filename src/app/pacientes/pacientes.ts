@@ -1,4 +1,5 @@
 import {IPaciente} from "../../types/pacientes";
+const Cryptr = require('cryptr');
 
 const apiUrl = `http://localhost:3000/api/pacientes`;
 
@@ -50,11 +51,13 @@ export const getPaciente = async (nombrePaciente: string, apellidoPaciente: stri
 };
 
 export const insertarPaciente = async (infoPaciente: IPaciente) : Promise<IPaciente | void> => {
+    console.log("Insertando paciente de forma encriptada");
+    const cryptr = new Cryptr("secret");
 
     const pacienteNuevo = {
         paciente:{
-            apellido: infoPaciente.apellido,
-            nombre: infoPaciente.nombre,
+            apellido: cryptr.encrypt(infoPaciente.apellido),
+            nombre: cryptr.encrypt(infoPaciente.nombre),
             tipoDocumento: infoPaciente.tipoDocumento,
             documento: Number(infoPaciente.documento),
             direccion: infoPaciente?.direccion,
@@ -75,6 +78,7 @@ export const insertarPaciente = async (infoPaciente: IPaciente) : Promise<IPacie
 
         if(response.ok) {
             const data = await response.json();
+            console.log(data);
             return data.pacientes
         }else {
             throw new Error('Error al querer ingresar al paciente');
