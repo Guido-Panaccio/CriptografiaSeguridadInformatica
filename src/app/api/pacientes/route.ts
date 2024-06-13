@@ -44,11 +44,6 @@ export const GET = async (req: NextRequest) => {
                     tipoPrepaga:true,
                 },
             })
-            // Reduce the nombre and apellido fields to the 10 first characters for every paciente and add ... at the end
-            pacientes.forEach((paciente) => {
-                paciente.nombre = "(encrypted) " + paciente.nombre.substring(0, 10) + '...'
-                paciente.apellido = "(encrypted) " + paciente.apellido.substring(0, 10) + '...'
-            })
             return NextResponse.json({
                 pacientes
             })

@@ -14,7 +14,12 @@ export const getAllPacientes = async (): Promise<IPaciente[]> => {
 
     if(response.ok) {
         const data = await response.json();
-        return data.pacientes
+        const pacientes = data.pacientes;
+        pacientes.forEach((paciente) => {
+            paciente.nombre = "(encrypted) " + paciente.nombre.substring(0, 10) + '...'
+            paciente.apellido = "(encrypted) " + paciente.apellido.substring(0, 10) + '...'
+        })
+        return pacientes
     }else {
         throw new Error('Error al querer obtener los pacientes');
     } 
