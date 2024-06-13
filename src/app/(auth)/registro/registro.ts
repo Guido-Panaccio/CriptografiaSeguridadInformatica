@@ -1,5 +1,6 @@
 import { GET } from "@/app/api/usuarios/route";
 import { NextRequest } from "next/server";
+import bcrypt from 'bcryptjs'
 
 interface UserData {
     apellido: string;
@@ -57,7 +58,7 @@ export const insertarUsuario = async (infoUsuario: UserData) => {
             direccion: null,
             telefono: null,
             username: infoUsuario.email,
-            contrasena: infoUsuario.password
+            contrasena: bcrypt.hashSync(infoUsuario.password, 10)
         }
     };
 

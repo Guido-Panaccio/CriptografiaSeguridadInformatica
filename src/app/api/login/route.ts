@@ -2,12 +2,14 @@ import {NextRequest, NextResponse} from "next/server"
 import prisma from "../../../../prisma/client"
 import {sign} from "jsonwebtoken"
 import {serialize} from "cookie"
+import bcrypt from 'bcryptjs'
 
 const MAX_AGE = 60 * 60 * 10 // 10 hours
  
 export const GET = async (req: NextRequest) => {
     const usuario = req.nextUrl.searchParams.get("usuario")
-    const contraseña = req.nextUrl.searchParams.get("contraseña")
+    const contraseña = req.nextUrl.searchParams.get("contraseña") || ""
+
 
     const secret = process.env.JWT_SECRET || ""
     const token = sign(
@@ -31,12 +33,11 @@ export const GET = async (req: NextRequest) => {
         const user = await prisma.usuarios.findFirst({
             where: {
                 username: usuario,
-                contrasena: contraseña,
             },
         });
 
         if (user) {
-            // El usuario existe en la base de datos
+            // Verificar si contraseña es correcta con bcrypt
             const response = NextResponse.json({
                 mensaje: 'Usuario autenticado correctamente',
                 usuario: usuario,
@@ -84,13 +85,18 @@ export const POST = async (req: NextRequest) => {
     try{
         const user = await prisma.usuarios.findFirst({
             where: {
-                username: usuario,
-                contrasena: contraseña,
+                username: usuario
             },
         });
 
         if (user) {
             // El usuario existe en la base de datos
+            const match = bcrypt.compareSync(contraseña, user.contrasena)
+            if(!match){
+                return NextResponse.json({
+                    mensaje: 'Credenciales incorrectas',
+                });
+            }
             const response = NextResponse.json({
                 mensaje: 'Usuario autenticado correctamente',
                 usuario: usuario,

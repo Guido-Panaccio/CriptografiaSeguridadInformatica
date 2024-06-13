@@ -19,6 +19,7 @@
 		"@types/jwt-decode": "^3.1.0",
 		"@types/pg": "^8.10.9",
 		"axios": "^1.6.2",
+		"bcrypt": "^5.1.1",
 		"bcryptjs": "^2.4.3",
 		"bootstrap": "^5.3.2",
 		"class-variance-authority": "^0.7.0",
@@ -52,6 +53,8 @@
 		"zod": "^3.22.4"
 	},
 	"devDependencies": {
+		"@types/bcrypt": "^5.0.2",
+		"@types/bcryptjs": "^2.4.6",
 		"@types/cookie": "^0.5.4",
 		"@types/formidable": "^3.4.5",
 		"@types/jsonwebtoken": "^9.0.5",
