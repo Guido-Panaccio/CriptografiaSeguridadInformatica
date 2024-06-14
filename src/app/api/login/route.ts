@@ -91,7 +91,7 @@ export const POST = async (req: NextRequest) => {
 
         if (user) {
             // El usuario existe en la base de datos
-            const match = bcrypt.compareSync(contraseña, user.contrasena)
+            const match = bcrypt.compareSync(contraseña, user.contrasena ?? "")
             if(!match){
                 return NextResponse.json({
                     mensaje: 'Credenciales incorrectas',

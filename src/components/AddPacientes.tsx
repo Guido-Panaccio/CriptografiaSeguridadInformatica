@@ -96,7 +96,7 @@ const AddPaciente = () => {
                 apellido: apellido,
                 nombre: nombre,
                 tipoDocumento: selectedTipoDocumento,
-                documento: Number(documentNumber),
+                documento: documentNumber,
                 direccion: direccion === '' ? null : direccion,
                 telefono: telefono === '' ? null : telefono,
                 ocupacion: ocupacion === '' ? null : ocupacion,

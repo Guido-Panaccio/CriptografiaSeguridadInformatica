@@ -6,7 +6,7 @@ export interface IPaciente {
     apellido: string,
     nombre: string,
     tipoDocumento: string,
-    documento: number,
+    documento: string,
     direccion: string | null,
     telefono: string | null,
     ocupacion: string | null,

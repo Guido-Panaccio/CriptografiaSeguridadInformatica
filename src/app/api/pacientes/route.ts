@@ -15,7 +15,7 @@ export const GET = async (req: NextRequest) => {
                 where: {
                     nombre: nombrePaciente,
                     apellido: apellidoPaciente,
-                    documento: Number(DNIPaciente)
+                    documento: DNIPaciente
                 },
             });
 

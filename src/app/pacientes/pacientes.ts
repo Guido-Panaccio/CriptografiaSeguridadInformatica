@@ -11,13 +11,14 @@ export const getAllPacientes = async (): Promise<IPaciente[]> => {
         },
         cache: 'no-store',
     });
-
+    const cryptr = new Cryptr("secret");
     if(response.ok) {
         const data = await response.json();
         const pacientes = data.pacientes;
-        pacientes.forEach((paciente) => {
-            paciente.nombre = "(encrypted) " + paciente.nombre.substring(0, 10) + '...'
-            paciente.apellido = "(encrypted) " + paciente.apellido.substring(0, 10) + '...'
+        pacientes.forEach((paciente: { nombre: string; apellido: string; documento: string;}) => {
+            paciente.nombre = cryptr.decrypt(paciente.nombre);
+            paciente.apellido = cryptr.decrypt(paciente.apellido);
+            paciente.documento = cryptr.decrypt(paciente.documento);
         })
         return pacientes
     }else {
@@ -64,7 +65,7 @@ export const insertarPaciente = async (infoPaciente: IPaciente) : Promise<IPacie
             apellido: cryptr.encrypt(infoPaciente.apellido),
             nombre: cryptr.encrypt(infoPaciente.nombre),
             tipoDocumento: infoPaciente.tipoDocumento,
-            documento: Number(infoPaciente.documento),
+            documento: cryptr.encrypt(infoPaciente.documento),
             direccion: infoPaciente?.direccion,
             telefono: infoPaciente?.telefono,
             ocupacion: infoPaciente?.ocupacion,
@@ -95,14 +96,16 @@ export const insertarPaciente = async (infoPaciente: IPaciente) : Promise<IPacie
 
 
 export const editarPaciente = async (infoPaciente: IPaciente) : Promise<IPaciente | void> => {
+    console.log("Editando paciente de forma encriptada");
+    const cryptr = new Cryptr("secret");
 
     const pacienteEditar = {
         paciente:{
             idPaciente: infoPaciente.idPaciente,
-            apellido: infoPaciente.apellido,
-            nombre: infoPaciente.nombre,
+            apellido: cryptr.encrypt(infoPaciente.apellido),
+            nombre: cryptr.encrypt(infoPaciente.nombre),
             tipoDocumento: infoPaciente.tipoDocumento,
-            documento: Number(infoPaciente.documento),
+            documento: cryptr.encrypt(infoPaciente.documento),
             direccion: infoPaciente.direccion,
             telefono: infoPaciente.telefono,
             ocupacion: infoPaciente.ocupacion,

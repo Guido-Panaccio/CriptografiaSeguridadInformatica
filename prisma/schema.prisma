@@ -33,10 +33,10 @@ model Usuarios {
 
 model Pacientes {
   idPaciente    Int            @id @default(autoincrement())
-  apellido      String         @db.VarChar(50)
-  nombre        String         @db.VarChar(50)
+  apellido      String         @db.Text
+  nombre        String         @db.Text
   tipoDocumento String         @db.VarChar(3)
-  documento     Int
+  documento     String         @db.Text
   direccion     String?        @db.VarChar(100)
   telefono      String?        @db.VarChar(50)
   ocupacion     String?        @db.VarChar(50)
