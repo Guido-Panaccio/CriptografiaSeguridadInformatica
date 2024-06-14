@@ -2,11 +2,12 @@ import { GET } from "@/app/api/usuarios/route";
 import { NextRequest } from "next/server";
 
 
-export const verificarUsuario = async (username: string, password: string) => {
+export const verificarUsuario = async (username: string, password: string,codigo:string|null) => {
     const credenciales = {
         credenciales:{
             usuario: username,
-            contraseña: password
+            contraseña: password,
+            codigo:codigo,
         }
     };
 
