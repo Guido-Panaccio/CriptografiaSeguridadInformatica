@@ -20,6 +20,8 @@ import {
 
 
 const FormSchema = z.object({
+    codigo:z.string()
+    .min(6, "El codigo tiene 6 caracteres"),
 	email: z.string().min(1, "Se requiere un email").email("Email invalido"),
 	password: z
 		.string()
@@ -27,18 +29,18 @@ const FormSchema = z.object({
 		.min(8, "La contraseña debe tener al menos 8 caracteres"),
 });
 
-const SignInForm = () => {
+const SecondFactorForm = () => {
 
 	const {push} = useRouter()
 	const [errorMessage, setErrorMessage] = useState('');
 
 	const comprobarUsuario = async (values: z.infer<typeof FormSchema>) => {
-		var respuesta = await verificarUsuario(values.email, values.password,null);
+		var respuesta = await verificarUsuario(values.email, values.password,values.codigo);
 		if(respuesta === 'Credenciales incorrectas'){
 			setErrorMessage(respuesta);
 		}else{
 			setErrorMessage('');
-			push('/verify')
+			push('/mainPage')
 		}
 		
 	};
@@ -55,7 +57,8 @@ const SignInForm = () => {
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="w-80">
 				<div className=" space-y-3">
-					<FormField
+					<h2>Reingrese sus credenciales con el código que recibió al mail con el que se registró.</h2>
+				<FormField
 						control={form.control}
 						name="email"
 						render={({ field }) => (
@@ -89,6 +92,23 @@ const SignInForm = () => {
 							</FormItem>
 						)}
 					/>
+					<FormField
+						control={form.control}
+						name="codigo"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Código</FormLabel>
+								<FormControl>
+									<Input
+										placeholder="123456"
+										type="text"
+										{...field}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 				</div>
 
 				<Button className="w-full mt-6 " name="btnIniciarSesion" type="submit" onClick={form.handleSubmit(comprobarUsuario)}>
@@ -100,17 +120,8 @@ const SignInForm = () => {
 				</div>
 				)}
 			</form>
-			<div className="mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400 ">
-				o
-			</div>
-			<p className="text-center text-sm text-gray-600 mt-2">
-				¿No tenes una cuenta?{" "}
-				<a className="text-blue-600 hover:underline" href="/sign-up">
-					Registrate
-				</a>
-			</p>
 		</Form>
 	);
 };
 
-export default SignInForm;
+export default SecondFactorForm;
