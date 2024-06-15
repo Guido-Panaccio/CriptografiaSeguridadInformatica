@@ -57,6 +57,7 @@ const SecondFactorForm = () => {
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="w-80">
 				<div className=" space-y-3">
+					<h2>Reingrese sus credenciales con el código que recibió al mail con el que se registró.</h2>
 				<FormField
 						control={form.control}
 						name="email"
@@ -96,7 +97,7 @@ const SecondFactorForm = () => {
 						name="codigo"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Codigo</FormLabel>
+								<FormLabel>Código</FormLabel>
 								<FormControl>
 									<Input
 										placeholder="123456"
