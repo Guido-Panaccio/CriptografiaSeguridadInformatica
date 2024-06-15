@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "../../../../prisma/client"
+const Cryptr = require('cryptr');
+
 interface Params {
     idPaciente: number
 }
@@ -20,6 +22,11 @@ export const GET = async (req: NextRequest) => {
             });
 
             if (pacientes) {
+                // Decript nombre, apellido and documento
+                const cryptr = new Cryptr("secret");
+                pacientes.nombre = cryptr.decrypt(pacientes.nombre);
+                pacientes.apellido = cryptr.decrypt(pacientes.apellido);
+                pacientes.documento = cryptr.decrypt(pacientes.documento);
                 return NextResponse.json({
                     pacientes
                 });
@@ -44,6 +51,12 @@ export const GET = async (req: NextRequest) => {
                     tipoPrepaga:true,
                 },
             })
+            const cryptr = new Cryptr("secret");
+            pacientes.forEach(paciente => {
+                paciente.nombre = cryptr.decrypt(paciente.nombre);
+                paciente.apellido = cryptr.decrypt(paciente.apellido);
+                paciente.documento = cryptr.decrypt(paciente.documento);
+            });
             return NextResponse.json({
                 pacientes
             })
@@ -62,13 +75,16 @@ export const POST = async (req: NextRequest) => {
     console.log('Paciente a insertar');
     console.log(paciente);
 
+    console.log("Insertando paciente de forma encriptada");
+    const cryptr = new Cryptr("secret");
+
     try {
         const insertPaciente = await prisma.pacientes.create({
             data: {
-                apellido: paciente.apellido,
-                nombre: paciente.nombre,
+                apellido: cryptr.encrypt(paciente.apellido),
+                nombre: cryptr.encrypt(paciente.nombre),
                 tipoDocumento: paciente.tipoDocumento,
-                documento: paciente.documento,
+                documento: cryptr.encrypt(paciente.documento),
                 direccion: paciente.direccion,
                 telefono: paciente.telefono,
                 ocupacion: paciente.ocupacion,
