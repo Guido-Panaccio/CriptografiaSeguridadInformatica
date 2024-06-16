@@ -11,7 +11,7 @@ import { VscNotebook } from "react-icons/vsc";
 import { IPrepaga } from "@/types/prepaga";
 import { getAllPrepagas } from "@/app/tiposPrepagas/tiposPrepagas";
 import { IUsuario } from "@/types/usuario";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface PacienteProps {
@@ -134,8 +134,7 @@ const Paciente: React.FC<PacienteProps> = ({ paciente, usuario }) => {
     };
 
     const openExamenesPaciente = (idPaciente: number) => {
-        //const router = useRouter();
-    
+
         if (usuario.idRol !== 'MED') {
             // Mostrar mensaje de error con toastify
             toast.error('Acceso denegado: No tiene permisos para ver los exámenes del paciente.');
@@ -292,7 +291,6 @@ const Paciente: React.FC<PacienteProps> = ({ paciente, usuario }) => {
                 </Modal>
 
                 <VscNotebook onClick={() => openExamenesPaciente(paciente.idPaciente)} cursor="pointer" className='text-black-500' size={25} />
-                <ToastContainer className="w-10 h-12 top-0 right-0 m-5 relative " />{" "}
             </td>
         </tr>
     )
