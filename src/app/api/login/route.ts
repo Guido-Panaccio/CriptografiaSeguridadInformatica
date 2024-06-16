@@ -4,10 +4,10 @@ import {sign} from "jsonwebtoken"
 import {serialize} from "cookie"
 import bcrypt from 'bcryptjs'
 import * as nodemailer from 'nodemailer';
+import { codigosAutenticacion } from '../../globals';
 
 const MAX_AGE = 60 * 60 * 10 // 10 hours
 
-const codigosAutenticacion: { [key: string]: string } = {};
 
 // Configuración del servicio de correo electrónico (puedes usar cualquier proveedor)
 const transporter = nodemailer.createTransport({
@@ -155,7 +155,7 @@ export const POST = async (req: NextRequest) => {
                 return response
             } else {
                 // Tiene codigo
-                const match = bcrypt.compareSync(contraseña, user.contrasena ?? "")
+                const match = bcrypt.compareSync(requestData.credenciales.contraseña, user.contrasena ?? "")
                 if(!match){
                     return NextResponse.json({
                         mensaje: 'Credenciales incorrectas',

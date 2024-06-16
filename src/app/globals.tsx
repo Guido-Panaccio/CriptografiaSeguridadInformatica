@@ -1,0 +1,1 @@
+export const codigosAutenticacion: { [key: string]: string } = {};
