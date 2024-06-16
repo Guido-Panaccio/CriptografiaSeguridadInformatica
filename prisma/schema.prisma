@@ -27,8 +27,16 @@ model Usuarios {
   telefono      String?    @db.VarChar(50)
   username      String?    @db.VarChar(255)
   contrasena    String?    @db.VarChar(255)
+  idRol         String?    @db.VarChar(3)
+  rol           Roles?     @relation(fields: [idRol], references: [idRol], onDelete: SetNull, onUpdate: SetNull)
   Examenes      Examenes[]
-  Turnos  Turnos[]
+  Turnos        Turnos[]
+}
+
+model Roles{
+  idRol         String      @id @db.VarChar(3)
+  descripcion   String      @db.VarChar(50)
+  usuarios      Usuarios[]
 }
 
 model Pacientes {

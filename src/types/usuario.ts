@@ -1,4 +1,5 @@
 import { IExamen } from "./examen";
+import { IRol } from "./rol";
 
 export interface IUsuario {
     idUsuario: number;
@@ -10,5 +11,7 @@ export interface IUsuario {
     telefono?: string;
     username?: string;
     contrasena?: string;
+    idRol?: string;
     Examenes: IExamen[]; // Relación inversa con Exámenes
+    Rol: IRol | null;
   }

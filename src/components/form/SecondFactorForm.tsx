@@ -36,7 +36,7 @@ const SecondFactorForm = () => {
 
 	const comprobarUsuario = async (values: z.infer<typeof FormSchema>) => {
 		var respuesta = await verificarUsuario(values.email, values.password,values.codigo);
-		if(respuesta === 'Credenciales incorrectas'){
+		if(respuesta === 'Credenciales incorrectas' || respuesta === 'No posee un rol asignado'){
 			setErrorMessage(respuesta);
 		}else{
 			setErrorMessage('');

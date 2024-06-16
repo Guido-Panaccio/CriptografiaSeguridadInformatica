@@ -138,6 +138,14 @@ export const POST = async (req: NextRequest) => {
                         mensaje: 'Credenciales incorrectas',
                     });
                 }
+
+                //Verificamos si tiene rol
+                if (user.idRol == null){
+                    return NextResponse.json({
+                        mensaje: 'No posee un rol asignado',
+                    });
+                }
+
                 const response = NextResponse.json({
                     mensaje: 'Usuario autenticado correctamente',
                     usuario: usuario,

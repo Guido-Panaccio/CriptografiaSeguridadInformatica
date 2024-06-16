@@ -34,7 +34,8 @@ const SignInForm = () => {
 
 	const comprobarUsuario = async (values: z.infer<typeof FormSchema>) => {
 		var respuesta = await verificarUsuario(values.email, values.password,null);
-		if(respuesta === 'Credenciales incorrectas'){
+		console.log(respuesta);
+		if(respuesta === 'Credenciales incorrectas' || respuesta === 'No posee un rol asignado'){
 			setErrorMessage(respuesta);
 		}else{
 			setErrorMessage('');

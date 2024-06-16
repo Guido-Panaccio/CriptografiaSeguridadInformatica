@@ -1,4 +1,5 @@
 import {IPaciente} from "../../types/pacientes";
+import { obtenerUsuarioActual } from "../usuario/usuario";
 
 
 const apiUrl = `http://localhost:3000/api/pacientes`;

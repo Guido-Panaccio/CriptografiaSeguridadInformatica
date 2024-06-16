@@ -11,7 +11,7 @@ export const verificarUsuario = async (username: string, password: string,codigo
         }
     };
 
-    console.log(JSON.stringify(credenciales))
+    console.log(JSON.stringify(credenciales));
 
     const response = await fetch('http://localhost:3000/api/login', {
         method: 'POST',

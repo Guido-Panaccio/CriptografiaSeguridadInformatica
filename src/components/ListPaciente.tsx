@@ -287,7 +287,7 @@ const ListPaciente: React.FC<ListPacienteProps> = ({ pacientes, usuario }) => {
 
                             </td>
                         </tr>
-                        {filteredPacientes.map((paciente) => <Paciente key={paciente.idPaciente} paciente={paciente} />)}
+                        {filteredPacientes.map((paciente) => <Paciente key={paciente.idPaciente} paciente={paciente} usuario={usuario}/>)}
                     </tbody>
                 </table>
             </div>

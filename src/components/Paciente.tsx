@@ -10,12 +10,16 @@ import { editarPaciente, eliminarPaciente } from "@/app/pacientes/pacientes";
 import { VscNotebook } from "react-icons/vsc";
 import { IPrepaga } from "@/types/prepaga";
 import { getAllPrepagas } from "@/app/tiposPrepagas/tiposPrepagas";
+import { IUsuario } from "@/types/usuario";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface PacienteProps {
-    paciente: IPaciente
+    paciente: IPaciente,
+    usuario: IUsuario
 }
 
-const Paciente: React.FC<PacienteProps> = ({ paciente }) => {
+const Paciente: React.FC<PacienteProps> = ({ paciente, usuario }) => {
     const router = useRouter();
     const [openModalEdit, setOpenModalEdit] = useState<boolean>(false);
     const [openModalDelete, setOpenModalDelete] = useState<boolean>(false);
@@ -102,7 +106,7 @@ const Paciente: React.FC<PacienteProps> = ({ paciente }) => {
                 apellido: apellidoToEdit,
                 nombre: nombreToEdit,
                 tipoDocumento: tipoDocumentoToEdit,
-                documento: Number(documentoToEdit),
+                documento: documentoToEdit,
                 direccion: direccionToEdit === '' ? null : direccionToEdit,
                 telefono: telefonoToEdit === '' ? null : telefonoToEdit,
                 ocupacion: ocupacionToEdit === '' ? null : ocupacionToEdit,
@@ -130,13 +134,21 @@ const Paciente: React.FC<PacienteProps> = ({ paciente }) => {
     };
 
     const openExamenesPaciente = (idPaciente: number) => {
+        //const router = useRouter();
+    
+        if (usuario.idRol !== 'MED') {
+            // Mostrar mensaje de error con toastify
+            toast.error('Acceso denegado: No tiene permisos para ver los exámenes del paciente.');
+            return;
+        }
+    
         const params = {
             idPaciente: idPaciente.toString(),
         };
-
+    
         const queryString = new URLSearchParams(params).toString();
-
-        push(`/examen?${queryString}`);
+    
+        router.push(`/examen?${queryString}`);
     };
 
     useEffect(() => {
@@ -280,6 +292,7 @@ const Paciente: React.FC<PacienteProps> = ({ paciente }) => {
                 </Modal>
 
                 <VscNotebook onClick={() => openExamenesPaciente(paciente.idPaciente)} cursor="pointer" className='text-black-500' size={25} />
+                <ToastContainer className="w-10 h-12 top-0 right-0 m-5 relative " />{" "}
             </td>
         </tr>
     )
