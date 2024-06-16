@@ -18,7 +18,7 @@ interface IdsPacienteUsuario {
 const AddExamen: React.FC<IdsPacienteUsuario> = ({ IdPaciente, usuario }) => {
     const router = useRouter();
     const [modalOpen, setModalOpen] = useState<boolean>(false);
-    const [selectedTipoExamen, setSelectedTipoExamen] = useState('PERIO');
+    const [selectedTipoExamen, setSelectedTipoExamen] = useState('');
     const [observaciones, setObservaciones] = useState('');
     const [tipoExamen, setTipoExamen] = useState<ITipoExamen[] | null>([]);
     const [errorMessage, setErrorMessage] = useState('');
@@ -26,6 +26,13 @@ const AddExamen: React.FC<IdsPacienteUsuario> = ({ IdPaciente, usuario }) => {
     const handleTipoExamenChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedTipoExamen(event.target.value);
     };
+
+    // Para que el combo de tipo examen tome el primer valor por defecto en el guardado (si no se cambia)
+    useEffect(() => {
+        if (tipoExamen && tipoExamen.length > 0) {
+          setSelectedTipoExamen(tipoExamen[0].tipoExamen);
+        }
+    }, [tipoExamen]);
 
     const handleObservacionesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setObservaciones(e.target.value);
@@ -56,7 +63,7 @@ const AddExamen: React.FC<IdsPacienteUsuario> = ({ IdPaciente, usuario }) => {
 
         await registrarExamen(exameneAlta.examen);
 
-        setSelectedTipoExamen("PERIO")
+        setSelectedTipoExamen("")
         setObservaciones("");
         setModalOpen(false);
         router.refresh();

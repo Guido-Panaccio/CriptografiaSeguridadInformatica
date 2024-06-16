@@ -3,11 +3,15 @@ import prisma from "../../../../prisma/client"
 
 export const GET = async (req: NextRequest) => {
     const IdPaciente = req.nextUrl.searchParams.get("idPaciente");
+    const IdUsuario = req.nextUrl.searchParams.get("usuario");
 
     try {
         const examenes = await prisma.examenes.findMany({
             where: {
-                idPaciente: Number(IdPaciente),
+                AND: [
+                    { idPaciente: Number(IdPaciente) },
+                    { idUsuario: Number(IdUsuario) }
+                ]
             },
             include: {
                 usuario: true,

@@ -2,9 +2,10 @@ import {IExamen} from "../../types/examen";
 
 const apiUrl = `http://localhost:3000/api/examen`;
 
-export const getExamenesByPaciente = async (idPaciente: string): Promise<IExamen[]> => {
+export const getExamenesByPacienteAndUsuario = async (idPaciente: string, usuario: number): Promise<IExamen[]> => {
     const params = {
         idPaciente: idPaciente,
+        usuario: usuario.toString(),
     };
     
     const queryString = new URLSearchParams(params).toString();

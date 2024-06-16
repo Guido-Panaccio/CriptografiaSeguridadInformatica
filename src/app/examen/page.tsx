@@ -1,4 +1,4 @@
-import { getExamenesByPaciente } from "./examen";
+import { getExamenesByPacienteAndUsuario } from "./examen";
 import { obtenerUsuarioActual } from "../usuario/usuario";
 import AddExamen from "@/components/AddExamen";
 import ListExamenes from "@/components/ListExamenes";
@@ -13,7 +13,7 @@ interface PacienteExamen {
 export default async function examen(req: PacienteExamen) {
     const IdPaciente = req.searchParams.idPaciente;
     const usuario = await obtenerUsuarioActual();
-    const examenes = await getExamenesByPaciente(IdPaciente);
+    const examenes = await getExamenesByPacienteAndUsuario(IdPaciente, usuario.idUsuario);
 
     return (
         <main className="max-w-4kx mx-auto mt-4">
