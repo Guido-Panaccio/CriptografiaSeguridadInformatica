@@ -37,9 +37,14 @@ const SignInForm = () => {
 		console.log(respuesta);
 		if(respuesta === 'Credenciales incorrectas' || respuesta === 'No posee un rol asignado'){
 			setErrorMessage(respuesta);
-		}else{
+		}
+		else if(respuesta === 'Usuario no verificado'){
 			setErrorMessage('');
 			push('/verify')
+		}
+		else{
+			setErrorMessage('');
+			push('/mainPage')
 		}
 		
 	};

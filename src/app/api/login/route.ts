@@ -4,7 +4,8 @@ import {sign} from "jsonwebtoken"
 import {serialize} from "cookie"
 import bcrypt from 'bcryptjs'
 import * as nodemailer from 'nodemailer';
-import { codigosAutenticacion } from '../../globals';
+
+const { setCodigoAutenticacion, getCodigoAutenticacion } = require('../../globals');
 
 const MAX_AGE = 60 * 60 * 10 // 10 hours
 
@@ -22,7 +23,7 @@ const transporter = nodemailer.createTransport({
 async function generarCodigoVerificacion(username:string): Promise<string> {
     // Generar un código aleatorio de 6 dígitos
     const codigo = Math.floor(100000 + Math.random() * 900000).toString();
-    codigosAutenticacion.set(username, codigo);
+    setCodigoAutenticacion(username, codigo);
     return codigo;
 }
 
@@ -129,53 +130,70 @@ export const POST = async (req: NextRequest) => {
                 username: usuario
             },
         });
+
         if (user) {
-            if (!codigo){            
-                // El usuario existe en la base de datos
-                const match = bcrypt.compareSync(contraseña, user.contrasena ?? "")
-                if(!match){
-                    return NextResponse.json({
-                        mensaje: 'Credenciales incorrectas',
-                    });
-                }
+            // El usuario existe en la base de datos
+            const match = bcrypt.compareSync(contraseña, user.contrasena ?? "")
+            if(!match){
+                return NextResponse.json({
+                    mensaje: 'Credenciales incorrectas',
+                });
+            }
+            
+            //Verificamos si tiene rol
+            if (user.idRol == null){
+                return NextResponse.json({
+                    mensaje: 'No posee un rol asignado',
+                });
+            }
 
-                //Verificamos si tiene rol
-                if (user.idRol == null){
-                    return NextResponse.json({
-                        mensaje: 'No posee un rol asignado',
-                    });
-                }
-
+            //Verificamos si fue verificado
+            if(user.verificado)
+            {
                 const response = NextResponse.json({
                     mensaje: 'Usuario autenticado correctamente',
+                    usuario: usuario,
+                })
+                response.headers.set("Set-Cookie", serialized)
+                return response
+            }
+
+            // No tiene codigo
+            if (!codigo){
+                const response = NextResponse.json({
+                    mensaje: 'Usuario no verificado',
                     usuario: usuario,
                 })
                 const codigoVerificacion = await generarCodigoVerificacion(usuario)
                 await enviarCorreoVerificacion(usuario, codigoVerificacion)
                 return response
-            } else {
-                // Tiene codigo
-                const match = bcrypt.compareSync(requestData.credenciales.contraseña, user.contrasena ?? "")
-                if(!match){
-                    return NextResponse.json({
-                        mensaje: 'Credenciales incorrectas',
-                    });
-                }
-                // Verificar el código de verificación
-                const codigoGuardado = codigosAutenticacion.get(usuario);
-                if (codigoGuardado && codigoGuardado === codigo) {
-                    const response = NextResponse.json({
-                        mensaje: 'Usuario autenticado correctamente',
-                        usuario: usuario,
-                    })
-                    response.headers.set("Set-Cookie", serialized)
-                    return response
-                } else {                   
-                    return NextResponse.json({
-                        mensaje: 'Credenciales incorrectas',
-                    });
-                }                
-            }
+            } 
+
+            // Tiene codigo
+            const codigoGuardado = getCodigoAutenticacion(usuario);
+            if (codigoGuardado && codigoGuardado === codigo) {
+
+                const updateUser = await prisma.usuarios.update({
+                    where: 
+                    {
+                        idUsuario: user.idUsuario
+                    },
+                    data: {
+                        verificado: true, 
+                    },
+                })
+
+                const response = NextResponse.json({
+                    mensaje: 'Usuario autenticado correctamente',
+                    usuario: usuario,
+                })
+                response.headers.set("Set-Cookie", serialized)
+                return response
+            } 
+            
+            return NextResponse.json({
+                mensaje: 'Credenciales incorrectas',
+            });
         } else {
             // El usuario no existe en la base de datos
             return NextResponse.json({
