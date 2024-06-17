@@ -1,1 +1,1 @@
-export const codigosAutenticacion: { [key: string]: string } = {};
+export const codigosAutenticacion=new Map<string, string>();;

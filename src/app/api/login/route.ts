@@ -19,10 +19,10 @@ const transporter = nodemailer.createTransport({
 });
 
 // Función para generar un código de verificación
-function generarCodigoVerificacion(username:string): string {
+async function generarCodigoVerificacion(username:string): Promise<string> {
     // Generar un código aleatorio de 6 dígitos
     const codigo = Math.floor(100000 + Math.random() * 900000).toString();
-    codigosAutenticacion[username] = codigo;
+    codigosAutenticacion.set(username, codigo);
     return codigo;
 }
 
@@ -150,7 +150,7 @@ export const POST = async (req: NextRequest) => {
                     mensaje: 'Usuario autenticado correctamente',
                     usuario: usuario,
                 })
-                const codigoVerificacion = generarCodigoVerificacion(usuario)
+                const codigoVerificacion = await generarCodigoVerificacion(usuario)
                 await enviarCorreoVerificacion(usuario, codigoVerificacion)
                 return response
             } else {
@@ -161,7 +161,9 @@ export const POST = async (req: NextRequest) => {
                         mensaje: 'Credenciales incorrectas',
                     });
                 }
-                if (codigosAutenticacion[usuario]===codigo){
+                // Verificar el código de verificación
+                const codigoGuardado = codigosAutenticacion.get(usuario);
+                if (codigoGuardado && codigoGuardado === codigo) {
                     const response = NextResponse.json({
                         mensaje: 'Usuario autenticado correctamente',
                         usuario: usuario,
