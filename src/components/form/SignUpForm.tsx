@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import toast styles
 import * as z from "zod";
 import { ComboBox } from "../ui/combo";
+import {useRouter} from 'next/navigation'
 
 import {
 	Form,
@@ -46,6 +47,7 @@ const FormSchema = z
 
 const SignUpForm = () => {
 	const [errorMessage, setErrorMessage] = useState("");
+	const {push} = useRouter();
 
 	const registrarUsuario = async (values: z.infer<typeof FormSchema>) => {
 		try {
@@ -58,6 +60,8 @@ const SignUpForm = () => {
 				toast.success("Usuario registrado correctamente!", {
 					position: toast.POSITION.TOP_RIGHT,
 				});
+				await new Promise(resolve => setTimeout(resolve, 3000));
+				push('/mainPage');
 			}
 		} catch (error) {
 			console.error("Error registering user:", error);

@@ -20,7 +20,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // Función para generar un código de verificación
-async function generarCodigoVerificacion(username:string): Promise<string> {
+function generarCodigoVerificacion(username:string): string {
     // Generar un código aleatorio de 6 dígitos
     const codigo = Math.floor(100000 + Math.random() * 900000).toString();
     setCodigoAutenticacion(username, codigo);
@@ -158,21 +158,19 @@ export const POST = async (req: NextRequest) => {
                 return response
             }
 
-            // No tiene codigo
+            // No envia el codigo
             if (!codigo){
                 const response = NextResponse.json({
                     mensaje: 'Usuario no verificado',
                     usuario: usuario,
                 })
-                const codigoVerificacion = await generarCodigoVerificacion(usuario)
+                const codigoVerificacion = generarCodigoVerificacion(usuario)
                 await enviarCorreoVerificacion(usuario, codigoVerificacion)
                 return response
             } 
 
-            // Tiene codigo
             const codigoGuardado = getCodigoAutenticacion(usuario);
             if (codigoGuardado && codigoGuardado === codigo) {
-
                 const updateUser = await prisma.usuarios.update({
                     where: 
                     {
