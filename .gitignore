@@ -39,3 +39,6 @@ notas
 
 # data folder
 data/
+
+# google drive
+*.ini
